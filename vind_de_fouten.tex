@@ -1,0 +1,113 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[dutch]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{environ}
+\usepackage{lineno}
+\usepackage{enumitem}
+
+% No paragraph indentation, but add vertical space between paragraphs
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5\baselineskip}
+
+% Conditional compilation flags
+\newif\ifshowopgave
+\newif\ifshowoplossing
+
+% Counter for exercises
+\newcounter{opgavenummer}
+\setcounter{opgavenummer}{0}
+
+% Environment for the main exercise (text + questions)
+\NewEnviron{opgave}{
+  \ifshowopgave
+    \refstepcounter{opgavenummer}
+    \par\medskip
+    \subsection*{Opgave \theopgavenummer}
+    \BODY
+    \medskip
+  \fi
+}
+
+% Counter for solutions
+\newcounter{oplossingnummer}
+\setcounter{oplossingnummer}{0}
+
+% Environment for answer key
+\NewEnviron{oplossing}{
+  \ifshowoplossing
+    \refstepcounter{oplossingnummer}
+    \par\medskip
+    \noindent\textbf{Opgave \theoplossingnummer}\\
+    \BODY
+    \medskip
+  \fi
+}
+
+% Environment for text with line numbers and errors
+\newenvironment{tekstmetfouten}{%
+  \par\medskip
+  \textbf{Tekst:}
+  \par\smallskip
+  \begin{linenumbers}
+  \resetlinenumber
+  \small
+}{%
+  \end{linenumbers}
+  \par\medskip
+}
+
+% Environment for multiple-choice questions
+\newenvironment{vragen}{%
+  \par\medskip
+  \textbf{Vragen:}
+  \par\smallskip
+}{%
+  \par\medskip
+}
+
+% Command for a single question
+% Usage: \vraag{line number}{text fragment}{option A}{option B}{option C}{option D}
+\newcounter{vraagnummer}
+\newcommand{\vraag}[6]{%
+  \stepcounter{vraagnummer}
+  \par\medskip
+  \noindent\textbf{Vraag \thevraagnummer} (regel #1): ``#2''
+  \par\smallskip
+  \begin{enumerate}[label=\Alph*., leftmargin=1.5em]
+    \item #3
+    \item #4
+    \item #5
+    \item #6
+  \end{enumerate}
+}
+
+% Reset question counter at start of each exercise
+\BeforeBeginEnvironment{opgave}{\setcounter{vraagnummer}{0}}
+
+\title{Vind de Fouten}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% First pass: show exercises
+\showopgavetrue
+\showoplossingfalse
+\input{filelist.tex}
+
+\clearpage
+\appendix
+
+% Second pass: show answer keys
+\section*{Antwoordsleutels}
+\showopgavefalse
+\showoplossingtrue
+\input{filelist.tex}
+
+\end{document}
