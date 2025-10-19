@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# calc: evaluate expression using bc
+if [ $# -eq 0 ]; then
+  echo "Usage: calc \"3 + 4 * (2 - 1)\"" >&2
+  exit 1
+fi
+
+# Join all arguments into one expression
+expr="$*"
+
+# Evaluate using bc with math library and scale
+echo "$expr" | bc -l

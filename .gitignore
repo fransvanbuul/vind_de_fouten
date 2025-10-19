@@ -1,0 +1,43 @@
+# LaTeX intermediate and output files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.lof
+*.lot
+*.lol
+
+# Editors and OS junk
+*.swp
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+# pdf output (optional)
+*.pdf
+
+# latexmk or arara generated files
+*.dvi
+*.xdv
+*.ps
+*.glg
+*.glo
+*.gls
+*.ist
+*.acn
+*.acr
+*.alg
+
+# subdirectory artifacts (if using build dir)
+build/
+output/

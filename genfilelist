@@ -1,0 +1,7 @@
+#!/bin/bash
+# Generates a file list of all exercises to be included.
+
+echo "% GENERATED FILE. DO NOT EDIT DIRECTLY" > filelist.tex
+for f in exercises/*.tex; do
+  echo "\\input{$f}" >> filelist.tex
+done
