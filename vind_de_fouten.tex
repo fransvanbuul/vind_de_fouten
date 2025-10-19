@@ -25,7 +25,7 @@
 \NewEnviron{opgave}{
   \ifshowopgave
     \refstepcounter{opgavenummer}
-    \par\medskip
+    \clearpage
     \subsection*{Opgave \theopgavenummer}
     \BODY
     \medskip
@@ -70,19 +70,24 @@
 }
 
 % Command for a single question
-% Usage: \vraag{line number}{text fragment}{option A}{option B}{option C}{option D}
+% Usage: \vraag{line number}{text fragment}{focus phrase}{option A}{option B}{option C}{option D}
 \newcounter{vraagnummer}
-\newcommand{\vraag}[6]{%
+\newcommand{\vraag}[7]{%
   \stepcounter{vraagnummer}
-  \par\medskip
-  \noindent\textbf{Vraag \thevraagnummer} (regel #1): ``#2''
-  \par\smallskip
-  \begin{enumerate}[label=\Alph*., leftmargin=1.5em]
-    \item #3
-    \item #4
-    \item #5
-    \item #6
-  \end{enumerate}
+  \par\bigskip
+  \noindent\begin{minipage}{\textwidth}
+    \noindent\textbf{Vraag \thevraagnummer.} Lees regel #1: ``#2''
+    \par\smallskip
+    \noindent Wat moet je doen met ``#3''?
+    \par\smallskip
+    \begin{enumerate}[label=\Alph*., leftmargin=1.5em]
+      \item #4
+      \item #5
+      \item #6
+      \item #7
+    \end{enumerate}
+  \end{minipage}
+  \par\bigskip
 }
 
 % Reset question counter at start of each exercise

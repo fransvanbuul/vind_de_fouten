@@ -1,0 +1,66 @@
+name: Build and Release PDF
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.0
+  workflow_dispatch:  # Allows manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Install LaTeX dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-lang-european texlive-fonts-recommended
+        
+    - name: Generate file list
+      run: ./genfilelist
+      
+    - name: Build PDF
+      run: |
+        # Run pdflatex twice to ensure proper cross-references
+        pdflatex vind_de_fouten.tex
+        pdflatex vind_de_fouten.tex
+
+    - name: Check PDF was created
+      run: |
+        if [ ! -f vind_de_fouten.pdf ]; then
+          echo "PDF was not created successfully"
+          exit 1
+        fi
+        ls -la vind_de_fouten.pdf
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: vind_de_fouten.pdf
+        name: "Vind de Fouten ${{ github.ref_name }}"
+        body: |
+          📝 Dutch Spelling and Grammar Exercises (Vind de Fouten)
+
+          This release contains the compiled PDF with all exercises and answer keys.
+
+          **What's included:**
+          - Complete exercise book with Dutch spelling/grammar exercises for groep 8 students
+          - Answer keys with explanations in the appendix
+          - Engaging themes: gaming, tennis, scouts, Harry Potter, cooking, and more!
+
+          **How to use:**
+          1. Download the PDF file
+          2. Print or view digitally
+          3. Read the Dutch texts and answer the multiple-choice questions
+          4. Check answer keys with explanations in the appendix
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
